@@ -15,9 +15,12 @@
 ### v2
 接口测试: postman  
 功能:    
-   1. 完善/增加接口(增删改查请求)
-   2. 列表分页
+   1. 完善/增加接口(增删改查)
    2. 配置统一返回数据格式
-
+   3. 添加简单全局统一异常处理
 参考:  
    1. [SpringBoot，Spring 中常用注解@RequestMapping/@GetMapping/@PostMapping /@PutMapping/@DeleteMapping介绍](https://www.cnblogs.com/m2492565210/p/10652967.html)
+   2. [springBoot中对于model层、dao层、service层、controller层的理解](https://blog.csdn.net/mzc_love/article/details/106564640)
+   3. [springboot使用mybatis插入数据返回数据的id](https://blog.csdn.net/qq_37164847/article/details/82016762)
+   4. [SpringBoot获取http请求参数的方法](cnblogs.com/wjw1014/p/11611312.html)
+   5. [springboot封装统一返回数据格式和异常处理](https://www.pianshen.com/article/234513229/)
