@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--映射文件 配置-->
+<!-- namespace 的值是一个接口
+每个Mapper 接口对应一个配置文件  -->
+<mapper namespace="com.company.demo.mapper.CostMapper">
+    <!--
+        insert – 映射插入语句。
+        update – 映射更新语句。
+        delete – 映射删除语句。
+        select – 映射查询语句。
+        公有属性：
+             id - 在命名空间中唯一的标识符，可以被用来引用这条语句,与UserMapper void add(User user)对应
+              parameterType - 将会传入这条语句的参数的类 与UserMapper 定义的方法传的参数类型对应，void add(User user)对应
+        Select 属性：
+            resultType - 返回结果的类, 如果返回的是集合，那应该设置为集合包含的类型. resultType 和 resultMap 之间只能同时使用一个。
+            resultMap - 对外部 指定 resultMap 的命名引用
+
+        insert和 update 属性：
+            useGeneratedKeys - （仅适用于 insert 和 update）这会令 MyBatis 使用 JDBC 的 getGeneratedKeys 方法来取出由数据库内部生成的主键（比如：像 MySQL 和 SQL Server 这样的关系型数据库管理系统的自动递增字段），默认值：false
+            keyProperty -  (仅适用于 insert 和 update）指定能够唯一识别对象的属性，MyBatis 会使用 getGeneratedKeys 的返回值或 insert 语句的 selectKey 子元素设置它的值，默认值：未设置（unset）。如果生成列不止一个，可以用逗号分隔多个属性名称。
+            keyColumn	- （仅适用于 insert 和 update）设置生成键值在表中的列名，在某些数据库（像 PostgreSQL）中，当主键列不是表中的第一列的时候，是必须设置的。如果生成列不止一个，可以用逗号分隔多个属性名称。
+        delete 属性:
+        -->
+    <!--   如果数据库支持自动生成主键的字段（比如 MySQL 和 SQL Server），那么可以设置 useGeneratedKeys=”true”，
+    然后再把 keyProperty 设置为目标属性就 OK 了。不支持 参考：https://mybatis.org/mybatis-3/zh/sqlmap-xml.html#Parameters -->
+    <insert id="addCost" parameterType="com.company.demo.entity.Cost" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO cost(name, base_duration, base_cost, unit_cost, status, descr, create_time, start_time, cost_type)
+        VALUES (#{name}, #{base_duration}, #{base_cost}, #{unit_cost}, #{status}, #{descr}, #{create_time},
+                #{start_time}, #{cost_type});
+    </insert>
+    <delete id="delCost" parameterType="java.lang.Integer">
+        DELETE
+        FROM cost
+        WHERE id = #{id}
+    </delete>
+    <update id="updateCost" parameterType="com.company.demo.entity.Cost" useGeneratedKeys="true" keyProperty="id">
+        UPDATE cost
+        SET name=#{name},
+            base_duration=#{base_duration},
+            base_cost=#{base_cost},
+            unit_cost=#{unit_cost},
+            status=#{status},
+            descr=#{descr},
+            create_time=#{create_time},
+            start_time=#{start_time},
+            cost_type=#{cost_type}
+        WHERE id = #{id}
+    </update>
+    <select id="findCostById" parameterType="java.lang.Integer" resultType="com.company.demo.entity.Cost">
+        SELECT *
+        FROM cost
+        WHERE id = #{id}
+    </select>
+    <select id="findAll" resultType="com.company.demo.entity.Cost">
+        SELECT *
+        FROM cost
+    </select>
+    <select id="selectCostPage" parameterType="com.company.demo.entity.Cost" resultType="com.company.demo.entity.Cost">
+        SELECT * FROM cost
+        <where>
+            <if test="id!=null">
+                id=#{id}
+            </if>
+            <if test="name!=null">
+                name=#{name}
+            </if>
+            <if test="base_duration!=null">
+                base_duration=#{base_duration}
+            </if>
+            <if test="base_cost!=0.0">
+                base_cost=#{base_cost}
+            </if>
+            <if test="unit_cost!=0.0">
+                unit_cost=#{unit_cost}
+            </if>
+            <if test="status!=null">
+                status=#{status}
+            </if>
+            <if test="descr!=null">
+                descr=#{descr}
+            </if>
+            <if test="create_time!=null">
+                create_time=#{create_time}
+            </if>
+            <if test="start_time!=null">
+                start_time=#{start_time}
+            </if>
+            <if test="cost_type!=null">
+                cost_type=#{cost_type}
+            </if>
+        </where>
+    </select>
+</mapper>

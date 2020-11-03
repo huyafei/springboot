@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.company.demo.mapper.AdminMapper">
+    <insert id="addAdmin" parameterType="com.company.demo.entity.Admin" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO admin_info (admin_code, password, name, telephone, email, create_time)
+        VALUES (#{admin_code}, #{password}, #{name}, #{telephone}, #{email}, #{create_time})
+    </insert>
+    <delete id="delAdmin" parameterType="java.lang.Integer">
+        DELETE
+        FROM admin_info
+        WHERE id = #{id}
+    </delete>
+    <update id="updateAdmin" parameterType="com.company.demo.entity.Admin" useGeneratedKeys="true" keyProperty="id">
+        UPDATE admin_info
+        SET
+        <if test="#{password}!=null">
+            password=#{password},
+        </if>
+        <if test="#{name}!=null">
+            name=#{name},
+        </if>
+        <if test="#{telephone}!=null">
+            telephone=#{telephone},
+        </if>
+        <if test="#{email}!=null">
+            email=#{email}
+        </if>
+        WHERE id = #{id}
+    </update>
+    <select id="findById" parameterType="java.lang.Integer" resultType="com.company.demo.entity.Admin">
+        SELECT *
+        FROM admin_info
+        WHERE id = #{id}
+    </select>
+    <!-- 注意resultType 的值是List中元素类型
+	 结果集行映射的数据类型-->
+    <select id="findAll" resultType="com.company.demo.entity.Admin" parameterType="com.company.demo.entity.Admin">
+        SELECT id,
+        admin_code,
+        password,
+        name,
+        telephone,
+        email,
+        create_time,
+        token
+        FROM admin_info
+        <where>
+            <if test="id!=null">
+                AND id=#{id}
+            </if>
+            <if test="admin_code!=null">
+                AND admin_code=#{admin_code}
+            </if>
+            <if test="password!=null">
+                AND password=#{password}
+            </if>
+            <if test="name!=null">
+                AND name=#{name}
+            </if>
+            <if test="telephone!=null">
+                AND telephone=#{telephone}
+            </if>
+            <if test="email!=null">
+                AND email=#{email}
+            </if>
+            <if test="create_time!=null">
+                AND create_time=#{create_time}
+            </if>
+
+        </where>
+    </select>
+    <select id="selectAdminPage" parameterType="com.company.demo.entity.Admin"
+            resultType="com.company.demo.entity.Admin">
+        SELECT * FROM admin_info
+        <where>
+            <if test="id!=null">
+                AND id=#{id}
+            </if>
+            <if test="admin_code!=null">
+                AND admin_code=#{admin_code}
+            </if>
+            <if test="name!=null">
+                AND name=#{name}
+            </if>
+
+            <if test="telephone!=null">
+                AND telephone=#{telephone}
+            </if>
+            <if test="email!=null">
+                AND email=#{email}
+            </if>
+            <if test="create_time!=null">
+                AND create_time=#{create_time}
+            </if>
+
+        </where>
+    </select>
+</mapper>
