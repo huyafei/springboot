@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+namespace 命名空间
+
+-->
+
+<mapper namespace="com.company.demo.mapper.RoleMapper">
+    <resultMap id="RoleMap" type="com.company.demo.entity.Role">
+        <result property="id" column="id"/>
+        <collection property="modules" column="id" javaType="java.util.List"
+                    select="com.company.demo.mapper.ModuleMapper.selectModuleByRoleId"></collection>
+    </resultMap>
+    <!--增加-->
+    <!--
+        parameterType: 参数的类全限定名或别名
+        useGeneratedKeys:（仅适用于 insert 和 update） 取出由数据库内部生成的主键
+        keyProperty:（仅适用于 insert 和 update） 指定能够唯一识别对象的属性
+        useGeneratedKeys="true" keyProperty="id"
+
+    -->
+    <insert id="insertRole" parameterType="com.company.demo.entity.Role" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO role (name,name_en) VALUES (#{name},#{name_en})
+    </insert>
+    <!--删除-->
+    <delete id="deleteRole" parameterType="int">
+        DELETE FROM role WHERE id = #{id}
+    </delete>
+    <!--修改-->
+    <update id="updateRole" parameterType="com.company.demo.entity.Role" useGeneratedKeys="true" keyProperty="id">
+        UPDATE role SET name=#{name},name_en=#{name_en} WHERE id = #{id}
+    </update>
+    <!--查询详情-->
+    <!--
+        parameterType: 参数的类
+        resultType: 返回结果的类全限定名或别名
+        resultMap: 对外部 resultMap 的命名引用, resultType 和 resultMap 之间只能同时使用一个
+    -->
+    <select id="selectRoleById" parameterType="int" resultMap="RoleMap">
+        SELECT * FROM role WHERE id=#{id}
+    </select>
+    <!--查询(分页 or 全部)-->
+    <select id="selectRoleList" parameterType="com.company.demo.entity.Role" resultType="com.company.demo.entity.Role">
+        SELECT * FROM role
+        <where>
+            <if test="id!=null">
+                id=#{id}
+            </if>
+            <if test="name!=null">
+                AND name like "%"#{name}"%"
+            </if>
+            <if test="name_en!=null">
+                AND name_en=#{name_en}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectRoleAll" resultType="com.company.demo.entity.Role">
+        SELECT * FROM role
+        <where>
+            <if test="#{id}!=null">
+                id=#{id}
+            </if>
+            <if test="#{name}!=null">
+                name=#{name}
+            </if>
+            <if test="#{name_en}!=null">
+                name
+            </if>
+        </where>
+    </select>
+    <!--根据admin id获取 角色信息-->
+    <select id="selectRoleByAdminId" parameterType="int" resultMap="RoleMap">
+        SELECT role.*  FROM admin_role,role WHERE admin_role.role_id = role.id AND admin_role.admin_id = #{adminId}
+    </select>
+
+</mapper>

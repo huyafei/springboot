@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.company.demo.mapper.ModuleMapper">
+    <resultMap id="moduleMap" type="com.company.demo.entity.Module">
+        <!--        <result property="id" column="id"></result>-->
+        <!--        <result property="name" column="name"></result>-->
+        <!--        <result property="url" column="url"></result>-->
+    </resultMap>
+    <insert id="insertModule" parameterType="com.company.demo.entity.Module" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO module (name,url)VALUES (#{name}, #{url})
+    </insert>
+    <delete id="deleteModule" parameterType="integer">
+        DELETE FROM module WHERE id=#{id}
+    </delete>
+    <update id="updateModule" parameterType="com.company.demo.entity.Module" useGeneratedKeys="true" keyProperty="id">
+        UPDATE module SET name=#{name},url=#{url} WHERE id=#{id}
+    </update>
+    <select id="selectModuleById" parameterType="integer" resultType="com.company.demo.entity.Module">
+        SELECT * FROM module WHERE id=#{id}
+    </select>
+    <select id="selectModuleAll" parameterType="com.company.demo.entity.Module" resultMap="moduleMap">
+        SELECT * FROM module
+        <where>
+            <if test="name!=null">
+                name like "%"#{name}"%"
+            </if>
+            <if test="url!=null">
+                AND  url = #{url}
+            </if>
+        </where>
+    </select>
+    <!--根据角色id查询对应的模块权限-->
+    <select id="selectModuleByRoleId" parameterType="java.lang.Integer" resultMap="moduleMap">
+        SELECT module.* FROM role_module INNER JOIN module ON role_module.module_id = module.id  WHERE role_module.role_id = #{roleId}
+    </select>
+</mapper>
