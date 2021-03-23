@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.company.demo.mapper.UserMapper">
+    <resultMap id="userMap" type="com.company.demo.entity.User">
+        <result property="recommenderId" column="recommender_id"></result>
+        <result property="loginName" column="login_name"></result>
+        <result property="loginPasswd" column="login_passwd"></result>
+        <result property="createDate" column="create_date"></result>
+        <result property="pauseDate" column="pause_date"></result>
+        <result property="closeDate" column="close_date"></result>
+        <result property="realName" column="real_name"></result>
+        <result property="idcardNo" column="idcard_no"></result>
+        <result property="lastLoginTime" column="last_login_time"></result>
+        <result property="lastLoginIp" column="last_login_ip"></result>
+        <result property="updateDate" column="update_date"></result>
+    </resultMap>
+    <insert id="insertUser" useGeneratedKeys="true" keyProperty="id" parameterType="com.company.demo.entity.User">
+        INSERT INTO user (recommender_id,login_name,login_passwd,status,create_date,pause_date,close_date,real_name,idcard_no,birthdate,gender,occupation,telephone,email,mailaddress,zipcode,qq,last_login_time,last_login_ip,update_date)
+        VALUES (#{recommenderId},#{loginName},#{loginPasswd},#{status},#{createDate},#{pauseDate},#{closeDate},#{realName},#{idcardNo},#{birthdate},#{gender},#{occupation},#{telephone},#{email},#{mailaddress},#{zipcode},#{qq},#{lastLoginTime},#{lastLoginIp},#{updateDate})
+    </insert>
+    <delete id="deleteUser" parameterType="integer">
+           DELETE  FROM user WHERE id=#{id}
+    </delete>
+    <update id="updateUser" parameterType="com.company.demo.entity.User" useGeneratedKeys="true" keyProperty="id">
+        UPDATE user
+        SET
+        <if test="#{recommenderId}!=null">
+            recommender_id=#{recommenderId},
+        </if>
+        <if test="#{loginName}!=null">
+            login_name=#{loginName},
+        </if>
+        <if test="#{loginPasswd}!=null">
+            login_passwd=#{loginPasswd},
+        </if>
+        <if test="#{status}!=null">
+            status=#{status},
+        </if>
+        <if test="#{createDate}!=null">
+            create_date=#{createDate},
+        </if>
+        <if test="#{pauseDate}!=null">
+            pause_date=#{pauseDate},
+        </if>
+        <if test="#{realName}!=null">
+            real_name=#{realName},
+        </if>
+        <if test="#{idcardNo}!=null">
+            idcard_no=#{idcardNo},
+        </if>
+        <if test="#{birthdate}!=null">
+            birthdate=#{birthdate},
+        </if>
+        <if test="#{gender}!=null">
+            gender=#{gender},
+        </if>
+        <if test="#{occupation}!=null">
+            occupation=#{occupation},
+        </if>
+        <if test="#{telephone}!=null">
+            telephone=#{telephone},
+        </if>
+
+        <if test="#{email}!=null">
+            email=#{email},
+        </if>
+        <if test="#{mailaddress}!=null">
+            mailaddress=#{mailaddress},
+        </if>
+        <if test="#{zipcode}!=null">
+            zipcode=#{zipcode},
+        </if>
+        <if test="#{qq}!=null">
+            qq=#{qq},
+        </if>
+        <if test="#{lastLoginTime}!=null">
+            last_login_time=#{lastLoginTime},
+        </if>
+        <if test="#{lastLoginIp}!=null">
+            last_login_ip=#{lastLoginIp},
+        </if>
+        <if test="#{updateDate}!=null">
+            update_date=#{updateDate}
+        </if>
+        WHERE id=#{id}
+    </update>
+    <select id="selectUserById" parameterType="integer" resultMap="userMap">
+        SELECT * FROM user WHERE id=#{id}
+    </select>
+</mapper>

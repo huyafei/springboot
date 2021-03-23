@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.company.demo.mapper.BillMapper">
+    <resultMap id="billMap" type="com.company.demo.entity.Bill">
+<!--        <id property="id" column="id"></id>-->
+        <result property="userId" column="user_id"></result>
+        <result property="billMonth" column="bill_month"></result>
+        <result property="paymentMode" column="payment_mode"></result>
+        <result property="payState" column="pay_state"></result>
+    </resultMap>
+    <insert id="insertBill" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO bill (user_id,bill_month,cost,payment_mode,pay_state)
+        VALUES (#{userId},#{billMonth},#{cost},#{paymentMode},#{payState})
+   </insert>
+    <delete id="deleteBill" parameterType="integer">
+        DELETE FROM bill WHERE id=#{id}
+    </delete>
+    <update id="updateBill" parameterType="com.company.demo.entity.Bill" useGeneratedKeys="true" keyProperty="id">
+        UPDATE bill
+        <set>
+            <if test="userId!=null">
+                user_id=#{userId},
+            </if>
+            <if test="billMonth!=null">
+                bill_month=#{billMonth},
+            </if>
+            <if test="cost!=null">
+                cost=#{cost},
+            </if>
+            <if test="paymentMode!=null">
+                payment_mode=#{paymentMode},
+            </if>
+            <if test="payState!=null">
+                pay_state=#{payState}
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+    <select id="selectBillById" parameterType="integer" resultMap="billMap">
+          select * FROM bill WHERE id=#{id}
+    </select>
+    <select id="selectBillListPage" parameterType="com.company.demo.entity.Bill" resultMap="billMap">
+        select * FROM bill
+        <where>
+            <if test="userId!=null">
+                user_id=#{userId}
+            </if>
+            <if test="billMonth!='null'">
+                AND bill_month=#{billMonth}
+            </if>
+<!--            <if test="cost!=null">-->
+<!--                AND cost=#{cost}-->
+<!--            </if>-->
+            <if test="paymentMode!=null">
+                AND payment_mode=#{paymentMode}
+            </if>
+            <if test="payState!=null">
+                AND pay_state=#{payState}
+            </if>
+        </where>
+    </select>
+</mapper>

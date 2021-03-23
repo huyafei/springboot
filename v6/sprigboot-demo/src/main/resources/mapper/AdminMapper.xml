@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+引用xml的namespace.引用select的ID
+-->
+<mapper namespace="com.company.demo.mapper.AdminMapper">
+    <!--resultMap 结果映射  type-->
+    <resultMap id="adminMap" type="com.company.demo.entity.Admin">
+        <result property="id" column="id"/>
+        <result property="adminCode" column="admin_code"/>
+        <result property="name" column="name"/>
+        <result property="telephone" column="telephone"/>
+        <result property="email" column="email"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <collection property="role" column="id" javaType="com.company.demo.entity.Role"
+                    select="com.company.demo.mapper.RoleMapper.selectRoleByAdminId">
+        </collection>
+    </resultMap>
+    <!--admin-->
+    <insert id="insertAdmin" parameterType="com.company.demo.entity.Admin" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO admin (admin_code, password, name, telephone, email, create_time,update_time)
+        VALUES (#{adminCode}, #{password}, #{name}, #{telephone}, #{email}, #{createTime},#{updateTime})
+    </insert>
+    <delete id="deleteAdmin" parameterType="java.lang.Integer">
+        DELETE
+        FROM admin
+        WHERE id = #{id}
+    </delete>
+    <update id="updateAdmin" parameterType="com.company.demo.entity.Admin" useGeneratedKeys="true" keyProperty="id">
+        UPDATE admin
+        SET
+        <if test="#{password}!=null">
+            password=#{password},
+        </if>
+        <if test="#{name}!=null">
+            name=#{name},
+        </if>
+        <if test="#{telephone}!=null">
+            telephone=#{telephone},
+        </if>
+        <if test="#{email}!=null">
+            email=#{email},
+        </if>
+        <if test="#{updateTime}!=null">
+            update_time=#{updateTime}
+        </if>
+        WHERE id = #{id}
+    </update>
+    <!--Admin{id=1, adminCode='admin', password='123456', name='', telephone='', email='', createTime=Wed Oct 28 15:38:04 CST 2020, token='null'}-->
+    <select id="selectAdminById" resultMap="adminMap">
+        SELECT * FROM admin  WHERE id = #{id}
+    </select>
+    <!-- 注意resultType 的值是List中元素类型
+	 结果集行映射的数据类型-->
+    <!--hashmap:[{adminCode=admin, password=123456, createTime=2020-10-28 15:38:04.0, name=, telephone=, id=1, email=}]-->
+    <!--map:[{adminCode=admin, password=123456, createTime=2020-10-28 15:38:04.0, name=, telephone=, id=1, email=}]-->
+    <select id="selectAdminList" parameterType="com.company.demo.entity.Admin"
+            resultType="com.company.demo.entity.Admin">
+        SELECT id,
+        admin_code as "adminCode",
+        password,
+        name,
+        telephone,
+        email,
+        create_time as "createTime",
+        token,
+        update_time as "updateTime"
+        FROM admin
+        <where>
+            <if test="id!=null">
+                AND id=#{id}
+            </if>
+            <if test="adminCode!=null">
+                AND admin_code=#{adminCode}
+            </if>
+            <if test="password!=null">
+                AND password=#{password}
+            </if>
+            <if test="name!=null">
+                AND name=#{name}
+            </if>
+            <if test="telephone!=null">
+                AND telephone=#{telephone}
+            </if>
+            <if test="email!=null">
+                AND email=#{email}
+            </if>
+            <if test="createTime!=null">
+                AND create_time=#{createTime}
+            </if>
+            <if test="updateTime!=null">
+                AND update_time=#{updateTime}
+            </if>
+        </where>
+    </select>
+    <!--[Admin{id=1, adminCode='admin', password='123456', name='', telephone='', email='', createTime=Wed Oct 28 15:38:04 CST 2020, token='null'}]-->
+    <select id="selectAdminListPage" parameterType="com.company.demo.entity.Admin"
+            resultMap="adminMap">
+        SELECT * FROM admin
+        <where>
+            <if test="id!=null">
+                id=#{id}
+            </if>
+            <if test="adminCode!=null">
+                AND admin_code=#{adminCode}
+            </if>
+            <if test="name!=null">
+                AND name like "%"#{name}"%"
+            </if>
+
+            <if test="telephone!=null">
+                AND telephone=#{telephone}
+            </if>
+            <if test="email!=null">
+                AND email=#{email}
+            </if>
+            <if test="createTime!=null">
+                AND create_time=#{createTime}
+            </if>
+            <if test="updateTime!=null">
+                AND update_time=#{updateTime}
+            </if>
+        </where>
+    </select>
+</mapper>

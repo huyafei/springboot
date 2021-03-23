@@ -1,0 +1,26 @@
+java基础知识回顾
+1.MVC：
+    Model(模型)+View(视图)+Controller(控制器)
+    Model指的就是数据模型，负责封装数据、处理数据，或者业务逻辑层，包含两层：业务数据层和业务处理层；例如：实体类，service
+    View负责展示用户界面；例如：前端页面
+    Controller用于协调模型和视图，负责接收用户请求；例如：controller，在servlet项目中的单一的控制器ActionServlet
+2.JAVA分层架构：
+    表现层：就是软件的界面,用来呈现数据,与用户交互；
+    （控制层）
+    业务层: 封装的了软件的核心功能（业务逻辑功能）；
+    数据层: 提供业务实体的 CRUD(增删改查)，也叫持久化层；
+
+    @Service 业务层组件注解 封装的了软件的核心功能（业务逻辑功能）
+    @Controller 控制层组件注解
+    @Repository 持久化层组件注解 提供业务实体的 CRUD(增删改查)，也叫数据层
+3.bean：
+    一种规范
+4.@Autowired与@Resource区别：
+    @Autowired
+        属于spring的
+        按byType自动注入
+    @Resource
+        按byName自动注入
+5.@Controller和@RestController区别：
+    @Controller 返回视图页面，跳转对应页面，若返回json等内容到页面，则需要加@ResponseBody注解
+    @RestController 返回json数据，是@Controller和@ResponseBody两个注解的结合
